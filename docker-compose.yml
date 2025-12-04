@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres          # имя пользователя БД
+      POSTGRES_PASSWORD: 123      # пароль пользователя
+      POSTGRES_DB: lab_3             # имя базы данных
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # volume для постоянного хранения данных
+    ports:
+      - "5432:5432"                  # проброс порта для доступа к БД
+volumes:
+  pgdata:
+
+#  wildfly:
+#    build: .                       # собираем образ из Dockerfile в текущей папке
+#    depends_on:
+#      - postgres                   # запускается после поднятия postgres
+#    ports:
+#      - "8080:8080"                # проброс порта для веб-приложения
+#    environment:
+#      DB_HOST: postgres            # имя хоста, под которым postgres доступен внутри docker-сети
+#      DB_PORT: 5432
+#      DB_NAME: postgres
+#      DB_USER: postgres
+#      DB_PASS: 123
+#volumes:
+#    pgdata:
+#      driver: local
+#      driver_opts:
+#        type: none
+#        device: C:/Users/Eternal Core/Documents/Web_lab_3_bd
+#        o: bind
