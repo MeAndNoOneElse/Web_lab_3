@@ -16,7 +16,7 @@ public class CaffeineCacheProvider implements CacheProvider {
 
     private volatile List<ResultDTO> cached;
     private final AtomicLong timestamp = new AtomicLong(0);
-    private final long ttlMillis = 5_000; // настраиваемое TTL
+    private final long ttlMillis = 10_000_000;
 
     @Override
     public List<ResultDTO> get() {

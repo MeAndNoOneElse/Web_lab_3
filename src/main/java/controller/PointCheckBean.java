@@ -9,14 +9,14 @@ import jakarta.inject.Named;
 
 import java.io.Serializable;
 
-import service.CacheController;
-import service.AreaCheckServiceInterface;
+import service.CachingAreaCheckService;
 
 @Named
 @ViewScoped
 public class PointCheckBean implements Serializable {
+
     @Inject
-    private CacheController cacheController;
+    private CachingAreaCheckService cacheService;
 
     @Inject
     private ResultsBean resultsBean;
@@ -54,8 +54,7 @@ public class PointCheckBean implements Serializable {
 
     public String checkArea() {
         PointDTO pointDTO = new PointDTO(x, y, r);
-        AreaCheckServiceInterface svc = cacheController.getService();
-        ResultDTO result = svc.checkAndSave(pointDTO);
+        ResultDTO result = cacheService.checkAndSave(pointDTO);
         resultsBean.addResult(result);
         return null;
     }

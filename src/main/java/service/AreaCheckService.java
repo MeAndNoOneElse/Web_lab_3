@@ -49,7 +49,6 @@ public class AreaCheckService implements AreaCheckServiceInterface, Serializable
 
     @Override
     public List<ResultDTO> getAllResults() {
-        // Защита: если repository не инжектирован — логируем и возвращаем пустой список
         if (repository == null) {
             LOGGER.warning("[DB] repository is null in getAllResults() — returning empty list to avoid NPE during init");
             return new ArrayList<>();
@@ -71,7 +70,7 @@ public class AreaCheckService implements AreaCheckServiceInterface, Serializable
                 entity.getR(),
                 entity.isHit(),
                 entity.getTimestamp(),
-                /* executionTimeMs: */ execMs
+                execMs
             );
             results.add(dto);
         }

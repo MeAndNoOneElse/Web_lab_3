@@ -11,16 +11,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import service.CacheController;
 import service.AreaCheckServiceInterface;
 import service.CacheType;
+import service.CachingAreaCheckService;
 
 @Named
 @ApplicationScoped
 public class ResultsBean implements Serializable {
 
     @Inject
-    private CacheController cacheController;
+    private CachingAreaCheckService cacheController;
 
     private List<ResultDTO> results = new ArrayList<>();
 

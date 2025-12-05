@@ -13,8 +13,7 @@ public class RedisCacheProvider implements CacheProvider {
 
     private volatile List<ResultDTO> cached;
     private final AtomicLong timestamp = new AtomicLong(0);
-    private final long ttlMillis = 60_000; // более длинный TTL для "Redis"
-
+    private final long ttlMillis = 10_000_000;
     @Override
     public List<ResultDTO> get() {
         if (!isFresh()) return null;

@@ -6,7 +6,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import service.CacheType;
-import service.CacheController;
+import service.CachingAreaCheckService;
 
 @Named("cacheSwitcher")
 @SessionScoped
@@ -14,14 +14,14 @@ public class CacheSwitcherBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private CacheController cacheController;
+    private CachingAreaCheckService cacheService;
 
     public CacheType getCurrent() {
-        return cacheController.getCacheType();
+        return cacheService.getCacheType();
     }
 
     public CacheType getCurrentCache() {
-        return cacheController.getCacheType();
+        return cacheService.getCacheType();
     }
 
     public CacheType[] getAvailableCaches() {
@@ -30,7 +30,7 @@ public class CacheSwitcherBean implements Serializable {
 
     public void setCache(CacheType type) {
         if (type == null) return;
-        cacheController.setCacheType(type);
+        cacheService.setCacheType(type);
     }
 
     public void setCaffeine() {
@@ -40,6 +40,7 @@ public class CacheSwitcherBean implements Serializable {
     public void setRedis() {
         setCache(CacheType.REDIS);
     }
+
     public String getCurrentCacheLabel() {
         return getCurrentCache() != null ? getCurrentCache().name() : "UNKNOWN";
     }
