@@ -26,16 +26,11 @@ public class CacheController implements Serializable {
     @Inject
     private RedisCacheProvider redisProvider;
 
-    // По умолчанию используем CAFFEINE (NONE убран)
+    // По умолчанию используем CAFFEINE
     private volatile CacheType current = CacheType.CAFFEINE;
 
     public AreaCheckServiceInterface getService() {
         try {
-            // Защита: если кэш-объекты ещё не инжектированы, возвращаем базовую реализацию
-            if (cachingService == null || caffeineProvider == null || redisProvider == null) {
-                LOGGER.warning("[CACHECTRL] cachingService or providers not available yet -> fallback to baseService");
-                return baseService;
-            }
             if (current == CacheType.CAFFEINE) {
                 LOGGER.fine("[CACHECTRL] getService() -> CAFFEINE selected");
                 cachingService.setActiveProvider(caffeineProvider);
@@ -73,14 +68,12 @@ public class CacheController implements Serializable {
         }
     }
 
-    // Добавленный метод: инвалидация всех провайдеров кэша (не затрагивает БД)
     public void invalidateAllCaches() {
         LOGGER.info("[CACHECTRL] invalidateAllCaches() called");
         if (caffeineProvider != null) caffeineProvider.invalidate();
         if (redisProvider != null) redisProvider.invalidate();
     }
 
-    // Удобный метод: удалить все данные в БД и очистить все кэши
     public void deleteAllEverything() {
         LOGGER.info("[CACHECTRL] deleteAllEverything() called — will delete DB and invalidate all caches");
         // удаляем в БД (через базовую реализацию)

@@ -16,7 +16,6 @@ public class CacheSwitcherBean implements Serializable {
     @Inject
     private CacheController cacheController;
 
-    // Геттер для EL-свойства "current"
     public CacheType getCurrent() {
         return cacheController.getCacheType();
     }
@@ -34,7 +33,6 @@ public class CacheSwitcherBean implements Serializable {
         cacheController.setCacheType(type);
     }
 
-    // Оставлены только методы для CAFFEINE и REDIS (NONE убран)
     public void setCaffeine() {
         setCache(CacheType.CAFFEINE);
     }
@@ -42,8 +40,6 @@ public class CacheSwitcherBean implements Serializable {
     public void setRedis() {
         setCache(CacheType.REDIS);
     }
-
-    // Для отображения в UI
     public String getCurrentCacheLabel() {
         return getCurrentCache() != null ? getCurrentCache().name() : "UNKNOWN";
     }

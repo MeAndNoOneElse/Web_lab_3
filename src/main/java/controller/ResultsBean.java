@@ -44,20 +44,8 @@ public class ResultsBean implements Serializable {
     }
 
     public void clearResults() {
+        cacheController.deleteAllEverything();
         results.clear();
-        AreaCheckServiceInterface svc = cacheController.getService();
-        svc.deleteAllResults();
-    }
-
-    public void removeResult(ResultDTO row) {
-        results.remove(row);
-    }
-
-    // переключение способа кэширования из UI (например через selectOneMenu)
-    public void setCacheType(CacheType type) {
-        cacheController.setCacheType(type);
-        // перезагрузим данные из выбранного сервиса/кэша
-        loadResultsFromDatabase();
     }
 
     public CacheType getCacheType() {
