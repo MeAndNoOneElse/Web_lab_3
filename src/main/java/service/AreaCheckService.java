@@ -3,47 +3,60 @@ package service;
 import dto.ResultDTO;
 import dto.PointDTO;
 
-import controller.ResultsBean;
-
 import entity.ResultEntity;
 
-import jakarta.faces.view.ViewScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
-import repository.Repository;
-
-
+import repository.RepositoryInterface;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Named
-@ViewScoped
-public class AreaCheckService implements Serializable {
-
-    @Inject
-    private ResultsBean resultsBean;
+@ApplicationScoped
+public class AreaCheckService implements AreaCheckServiceInterface, Serializable {
 
     @Inject
-    private Repository repository;
+    private RepositoryInterface repository;
 
+    @Override
     public ResultDTO checkAndSave(PointDTO point) {
-
-
-
         long startTime = System.nanoTime();
+        boolean hit = checkHit(point.getX(), point.getY(), point.getR());
         long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
         Date date = new Date();
-        boolean hit = checkHit(point.getX(), point.getY(), point.getR());
+
         ResultDTO resultDTO = new ResultDTO(point.getX(), point.getY(), point.getR(), hit, date, executionTime);
 
-        resultsBean.addResult(resultDTO);
-
-        ResultEntity result = new ResultEntity(1,point.getX(), Double.parseDouble(point.getY()), point.getR(), hit, date, executionTime );
+        ResultEntity result = new ResultEntity(1, point.getX(), Double.parseDouble(point.getY()), point.getR(), hit, date, executionTime);
         repository.saveResult(result);
 
         return resultDTO;
+    }
+
+    @Override
+    public List<ResultDTO> getAllResults() {
+        List<ResultEntity> entities = repository.getAllPoints();
+        List<ResultDTO> results = new ArrayList<>();
+        for (ResultEntity entity : entities) {
+            ResultDTO dto = new ResultDTO(
+                entity.getX(),
+                String.valueOf(entity.getY()),
+                entity.getR(),
+                entity.isHit(),
+                entity.getTimestamp(),
+                entity.getExecutionTimeNano()
+            );
+            results.add(dto);
+        }
+        return results;
+    }
+
+    @Override
+    public void deleteAllResults() {
+        repository.deleteAllPoints();
     }
 
     private boolean checkHit(double x, String yStr, double r) {

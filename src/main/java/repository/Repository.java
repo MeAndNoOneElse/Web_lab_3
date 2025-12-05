@@ -9,17 +9,18 @@ import entity.ResultEntity;
 import java.util.List;
 
 @ApplicationScoped
-public class Repository {
+public class Repository implements RepositoryInterface {
 
     @PersistenceContext(unitName = "labPU")
     private EntityManager entityManager;
 
-    private final String csvFile = "results.csv";
+    @Override
     @Transactional
     public void saveResult(ResultEntity point) {
         entityManager.persist(point);
     }
 
+    @Override
     public List<ResultEntity> getAllPoints() {
         return entityManager.createQuery(
                 "SELECT p FROM ResultEntity p ORDER BY p.timestamp DESC",
@@ -27,4 +28,9 @@ public class Repository {
         ).getResultList();
     }
 
+    @Override
+    @Transactional
+    public void deleteAllPoints() {
+        entityManager.createQuery("DELETE FROM ResultEntity").executeUpdate();
+    }
 }
