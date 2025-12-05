@@ -16,8 +16,6 @@ public class PointCheckBean implements Serializable {
     @Inject
     private AreaCheckService areaCheckService;
 
-    @Inject
-    private ErrorBean errorBean;
 
     private double x;
     private String y = "0";

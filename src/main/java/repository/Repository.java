@@ -6,12 +6,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import entity.ResultEntity;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 @ApplicationScoped
-public class History {
+public class Repository {
 
     @PersistenceContext(unitName = "labPU")
     private EntityManager entityManager;

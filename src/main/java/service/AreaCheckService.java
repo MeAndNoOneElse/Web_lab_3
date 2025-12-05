@@ -2,7 +2,7 @@ package service;
 
 import dto.ResultDTO;
 import dto.PointDTO;
-import controller.ErrorBean;
+
 import controller.ResultsBean;
 
 import entity.ResultEntity;
@@ -10,7 +10,7 @@ import entity.ResultEntity;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import repository.History;
+import repository.Repository;
 
 
 
@@ -20,37 +20,28 @@ import java.util.Date;
 @Named
 @ViewScoped
 public class AreaCheckService implements Serializable {
-    @Inject
-    private ErrorBean errorBean;
 
     @Inject
     private ResultsBean resultsBean;
 
     @Inject
-    private History history;
+    private Repository repository;
 
     public ResultDTO checkAndSave(PointDTO point) {
 
-        errorBean.clear();
-        boolean hit = false;
-        try {
-            hit = checkHit(point.getX(), point.getY(), point.getR());
-        } catch (Exception e) {
-            errorBean.setErrorMessage("Ошибка проверки точки(в AreaCheckService): " + e.getMessage());
-            return null;
-        }
+
 
         long startTime = System.nanoTime();
         long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
         Date date = new Date();
-
+        boolean hit = checkHit(point.getX(), point.getY(), point.getR());
         ResultDTO resultDTO = new ResultDTO(point.getX(), point.getY(), point.getR(), hit, date, executionTime);
 
         resultsBean.addResult(resultDTO);
 
         ResultEntity result = new ResultEntity(1,point.getX(), Double.parseDouble(point.getY()), point.getR(), hit, date, executionTime );
-        history.saveResult(result);
+        repository.saveResult(result);
 
         return resultDTO;
     }
