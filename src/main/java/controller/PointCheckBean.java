@@ -4,18 +4,19 @@ import dto.PointDTO;
 import dto.ResultDTO;
 
 import jakarta.inject.Inject;
-import service.AreaCheckServiceInterface;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
 import java.io.Serializable;
 
+import service.CacheController;
+import service.AreaCheckServiceInterface;
 
 @Named
 @ViewScoped
 public class PointCheckBean implements Serializable {
     @Inject
-    private AreaCheckServiceInterface areaCheckService;
+    private CacheController cacheController;
 
     @Inject
     private ResultsBean resultsBean;
@@ -50,9 +51,11 @@ public class PointCheckBean implements Serializable {
             this.r = r; // сохраняем новый выбор
         }
     }
+
     public String checkArea() {
         PointDTO pointDTO = new PointDTO(x, y, r);
-        ResultDTO result = areaCheckService.checkAndSave(pointDTO);
+        AreaCheckServiceInterface svc = cacheController.getService();
+        ResultDTO result = svc.checkAndSave(pointDTO);
         resultsBean.addResult(result);
         return null;
     }

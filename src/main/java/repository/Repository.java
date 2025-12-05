@@ -26,6 +26,7 @@ public class Repository implements RepositoryInterface {
                 "SELECT p FROM ResultEntity p ORDER BY p.timestamp DESC",
                 ResultEntity.class
         ).getResultList();
+
     }
 
     @Override

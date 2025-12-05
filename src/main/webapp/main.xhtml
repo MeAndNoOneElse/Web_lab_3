@@ -13,6 +13,15 @@
         <div id="authoris">
             <h:outputText id="userId" value="Вы на главной странице"/>
             <h:button value="Выйти" outcome="start" styleClass="yellow-btn"/>
+            <!-- Добавлен блок переключения кэша -->
+            <h:panelGroup style="display:inline-block; margin-left:20px;">
+                <h:outputText value="Кэш: "/>
+                <h:outputText id="cacheStatus" value="#{cacheSwitcher.current}"/>
+                <p:commandButton value="Caffeine" action="#{cacheSwitcher.setCaffeine}"
+                                 update="resultsTable cacheStatus" styleClass="ui-button-info" process="@this"/>
+                <p:commandButton value="Redis" action="#{cacheSwitcher.setRedis}"
+                                 update="resultsTable cacheStatus" styleClass="ui-button-warning" process="@this"/>
+            </h:panelGroup>
         </div>
         <br/>
         <!--        основный блок: форма и график-->

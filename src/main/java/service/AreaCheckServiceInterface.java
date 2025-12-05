@@ -10,3 +10,4 @@ public interface AreaCheckServiceInterface {
     List<ResultDTO> getAllResults();
     void deleteAllResults();
 }
+

@@ -1,23 +1,26 @@
 package controller;
 
 import dto.ResultDTO;
-import service.AreaCheckServiceInterface;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import service.CacheController;
+import service.AreaCheckServiceInterface;
+import service.CacheType;
 
 @Named
 @ApplicationScoped
 public class ResultsBean implements Serializable {
 
     @Inject
-    private AreaCheckServiceInterface areaCheckService;
+    private CacheController cacheController;
 
     private List<ResultDTO> results = new ArrayList<>();
 
@@ -28,7 +31,8 @@ public class ResultsBean implements Serializable {
 
     private void loadResultsFromDatabase() {
         results.clear();
-        results.addAll(areaCheckService.getAllResults());
+        AreaCheckServiceInterface svc = cacheController.getService();
+        results.addAll(svc.getAllResults());
     }
 
     public List<ResultDTO> getResults() {
@@ -41,10 +45,22 @@ public class ResultsBean implements Serializable {
 
     public void clearResults() {
         results.clear();
-        areaCheckService.deleteAllResults();
+        AreaCheckServiceInterface svc = cacheController.getService();
+        svc.deleteAllResults();
     }
 
     public void removeResult(ResultDTO row) {
         results.remove(row);
+    }
+
+    // переключение способа кэширования из UI (например через selectOneMenu)
+    public void setCacheType(CacheType type) {
+        cacheController.setCacheType(type);
+        // перезагрузим данные из выбранного сервиса/кэша
+        loadResultsFromDatabase();
+    }
+
+    public CacheType getCacheType() {
+        return cacheController.getCacheType();
     }
 }
