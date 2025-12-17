@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Бизнес-модель ФАРМ-СИНТЕЗ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header h2 {
+      font-size: 18px;
+      font-weight: 300;
+      opacity: 0.95;
+    }
+
+    .canvas {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: auto auto auto auto;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .block {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-sizing: border-box;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-left: 5px solid;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .block:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+    }
+
+    .block-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .block ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .block li {
+      margin-bottom: 6px;
+      padding-left: 16px;
+      position: relative;
+      font-size: 12px;
+    }
+
+    .block li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    /* Цветовая схема для блоков */
+    .partners {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+      border-left-color: #FF6B6B;
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+    }
+
+    .partners .block-title {
+      color: #d63031;
+    }
+
+    .activities {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+      border-left-color: #4ECDC4;
+      background: linear-gradient(135deg, #f0fffe 0%, #e0f9f7 100%);
+    }
+
+    .activities .block-title {
+      color: #00897b;
+    }
+
+    .resources {
+      grid-column: 2 / 3;
+      grid-row: 2 / 3;
+      border-left-color: #45B7D1;
+      background: linear-gradient(135deg, #f0f7ff 0%, #e0f1ff 100%);
+    }
+
+    .resources .block-title {
+      color: #0277bd;
+    }
+
+    .value {
+      grid-column: 3 / 4;
+      grid-row: 1 / 3;
+      border-left-color: #FFD93D;
+      background: linear-gradient(135deg, #fffbf0 0%, #fff9e6 100%);
+    }
+
+    .value .block-title {
+      color: #f57f17;
+    }
+
+    .relationships {
+      grid-column: 4 / 5;
+      grid-row: 1 / 2;
+      border-left-color: #A8E6CF;
+      background: linear-gradient(135deg, #f7fff7 0%, #efffed 100%);
+    }
+
+    .relationships .block-title {
+      color: #388e3c;
+    }
+
+    .channels {
+      grid-column: 4 / 5;
+      grid-row: 2 / 3;
+      border-left-color: #FF8B94;
+      background: linear-gradient(135deg, #fff8f8 0%, #ffe8e8 100%);
+    }
+
+    .channels .block-title {
+      color: #c2185b;
+    }
+
+    .segments {
+      grid-column: 3 / 5;
+      grid-row: 3 / 4;
+      border-left-color: #9D84B7;
+      background: linear-gradient(135deg, #f8f5ff 0%, #ede5f5 100%);
+    }
+
+    .segments .block-title {
+      color: #512da8;
+    }
+
+    .costs {
+      grid-column: 1 / 3;
+      grid-row: 3 / 4;
+      border-left-color: #FF6B9D;
+      background: linear-gradient(135deg, #fff5f8 0%, #ffe0ee 100%);
+    }
+
+    .costs .block-title {
+      color: #e91e63;
+    }
+
+    .footer-note {
+      margin-top: 35px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      font-size: 12px;
+      color: #555;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      line-height: 1.6;
+    }
+
+    .footer-note strong {
+      color: #333;
+    }
+
+    @media (max-width: 1024px) {
+      .canvas {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .partners {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+      }
+
+      .activities {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+
+      .resources {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+      }
+
+      .value {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+
+      .relationships {
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+      }
+
+      .channels {
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+      }
+
+      .segments {
+        grid-column: 1 / 3;
+        grid-row: 4 / 5;
+      }
+
+      .costs {
+        grid-column: 1 / 3;
+        grid-row: 5 / 6;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Бизнес-модель компании «ФАРМ-СИНТЕЗ»</h1>
+      <h2>Сектор Life Sciences · Business Model Canvas</h2>
+    </div>
+
+    <div class="canvas">
+      <!-- Ключевые партнёры (красный) -->
+      <div class="block partners">
+        <div class="block-title">🤝 Ключевые партнёры</div>
+        <ul>
+          <li>Государственные и частные медицинские учреждения (онкоцентры, больницы, клиники)</li>
+          <li>Фармдистрибьюторы и аптечные сети в России и странах СНГ</li>
+          <li>Научно-исследовательские институты и университеты</li>
+          <li>Поставщики химического сырья, оборудования и расходных материалов</li>
+          <li>Государственные регуляторы и профильные ведомства</li>
+        </ul>
+      </div>
+
+      <!-- Ключевые виды деятельности (бирюзовый) -->
+      <div class="block activities">
+        <div class="block-title">⚙️ Ключевые виды деятельности</div>
+        <ul>
+          <li>НИОКР и разработка новых препаратов</li>
+          <li>Промышленный синтез активных субстанций</li>
+          <li>Производство готовых лекарственных форм</li>
+          <li>Контроль качества и GMP соответствие</li>
+          <li>Регистрация препаратов и фармаконадзор</li>
+          <li>Маркетинг и продвижение</li>
+        </ul>
+      </div>
+
+      <!-- Ключевые ресурсы (голубой) -->
+      <div class="block resources">
+        <div class="block-title">💼 Ключевые ресурсы</div>
+        <ul>
+          <li>Научно-производственный комплекс с современным оборудованием</li>
+          <li>Портфель инновационных и дженериковых препаратов</li>
+          <li>Квалифицированный персонал (учёные, технологи, специалисты)</li>
+          <li>Права на интеллектуальную собственность и ноу-хау</li>
+          <li>Производственные лицензии и регуляторные разрешения</li>
+        </ul>
+      </div>
+
+      <!-- Ценностные предложения (жёлтый) -->
+      <div class="block value">
+        <div class="block-title">⭐ Ценностные предложения</div>
+        <ul>
+          <li>Эффективные и доступные лекарства для онкологии и других тяжёлых заболеваний</li>
+          <li>Сокращение зависимости от импорта за счёт локального производства</li>
+          <li>Современные лекарственные формы и инновационные разработки</li>
+          <li>Возможность контрактного производства для партнёров</li>
+        </ul>
+      </div>
+
+      <!-- Взаимоотношения с клиентами (зелёный) -->
+      <div class="block relationships">
+        <div class="block-title">💬 Взаимоотношения с клиентами</div>
+        <ul>
+          <li>Долгосрочные партнёрские контракты</li>
+          <li>Работа медицинских представителей</li>
+          <li>Информационная и методическая поддержка врачей</li>
+          <li>Участие в программах льготного обеспечения</li>
+        </ul>
+      </div>
+
+      <!-- Каналы сбыта (розовый) -->
+      <div class="block channels">
+        <div class="block-title">📢 Каналы сбыта</div>
+        <ul>
+          <li>Прямые поставки в медучреждения</li>
+          <li>Оптовые фармдистрибьюторы и аптечные сети</li>
+          <li>Государственные и коммерческие тендеры</li>
+          <li>Официальный сайт и профессиональные издания</li>
+        </ul>
+      </div>
+
+      <!-- Сегменты потребителей (фиолетовый) -->
+      <div class="block segments">
+        <div class="block-title">👥 Сегменты потребителей</div>
+        <ul>
+          <li>Медицинские учреждения России (онкологические диспансеры, клиники, стационары)</li>
+          <li>Аптечные сети и независимые аптеки</li>
+          <li>Государственные структуры здравоохранения (федеральные и региональные программы)</li>
+          <li>Рынки стран СНГ и других зарубежных регионов</li>
+        </ul>
+      </div>
+
+      <!-- Структура затрат (тёмно-розовый) -->
+      <div class="block costs">
+        <div class="block-title">💰 Структура затрат</div>
+        <ul>
+          <li>Расходы на НИОКР, доклинические и клинические исследования</li>
+          <li>Капитальные и операционные затраты на производство</li>
+          <li>Обеспечение качества и соответствие GMP требованиям</li>
+          <li>Маркетинг, продвижение и логистика</li>
+          <li>Административные и управленческие расходы</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <strong>Примечание:</strong> Данный Business Model Canvas подготовлен для учебных целей на основе открытой информации о компании «ФАРМ-СИНТЕЗ» (фармацевтическое производство, Россия). Используется для анализа бизнес-модели в рамках курса по построению моделей предприятия сектора Life Sciences.
+    </div>
+  </div>
+
+</body>
+</html>

@@ -63,7 +63,7 @@ public class AreaCheckService implements AreaCheckServiceInterface, Serializable
 
         List<ResultDTO> results = new ArrayList<>();
         for (ResultEntity entity : entities) {
-            long execMs = entity.getExecutionTimeNano()/1000;
+            long execMs = entity.getExecutionTimeNano()/1_000_000_000;
             ResultDTO dto = new ResultDTO(
                 entity.getX(),
                 String.valueOf(entity.getY()),
